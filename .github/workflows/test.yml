@@ -109,6 +109,7 @@ jobs:
             
         - name: Prepare artifact
           run: |
+            cd openwrt
             mkdir -p ./artifact/firmware
             mkdir -p ./artifact/package
             mkdir -p ./artifact/buildinfo
