@@ -59,7 +59,6 @@ jobs:
           
       - name: Update feeds
         run: |
-          cd openwrt
           sed -i 's/#src-git helloworld/src-git helloworld/g' ./feeds.conf.default
           ./scripts/feeds update -a
           ./scripts/feeds install -a
@@ -73,7 +72,6 @@ jobs:
 
       - name: Compile firmware
         run: |
-          cd openwrt
           make -j$(nproc) || make -j1 V=s
           echo "======================="
           echo "Space usage:"
@@ -99,26 +97,26 @@ jobs:
         uses: actions/upload-artifact@v2
         with:
           name: OpenWrt_buildinfo
-          path: ./artifact/buildinfo/
+          path: openwrt/artifact/buildinfo/
 
       - name: Deliver package
         uses: actions/upload-artifact@v2
         with:
           name: OpenWrt_package
-          path: ./artifact/package/
+          path: openwrt/artifact/package/
 
       - name: Deliver firmware
         uses: actions/upload-artifact@v2
         with:
           name: OpenWrt_firmware
-          path: ./bin/targets/
+          path: openwrt/bin/targets/
   
 
-      - name: Upload release asset
-        if: github.event == 'release'
-        uses: svenstaro/upload-release-action@v2
+      - name: Upload firmware to release
+        uses: softprops/action-gh-release@v1
+        if: steps.tag.outputs.status == 'success' && !cancelled()
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          repo_token: ${{ secrets.YOURTOKEN }}
-          file: ./artifact/firmware/*
-          tag: ${{ github.ref }}
-          file_glob: true
+          tag_name: ${{ steps.tag.outputs.release_tag }}
+          files: openwrt/artifact/firmware/*
