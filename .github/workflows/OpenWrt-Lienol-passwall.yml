@@ -43,7 +43,7 @@ jobs:
 
   build_openwrt:
 
-    name: Build OpenWrt firmware
+    name: OpenWrt-Lienol-passwall
 
     runs-on: ubuntu-latest
 
