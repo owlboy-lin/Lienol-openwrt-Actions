@@ -64,10 +64,20 @@ jobs:
           ./scripts/feeds update -a
           ./scripts/feeds install -a
 
-      - name: Make download
+      - name: Load custom configuration
         run: |
           cd openwrt
           make defconfig
+          [ -e files ] && mv files openwrt/files
+          [ -e $CONFIG_FILE ] && mv $CONFIG_FILE openwrt/.config
+          chmod +x $DIY_P2_SH
+          cd openwrt
+          $GITHUB_WORKSPACE/$DIY_P2_SH
+
+      - name: Make download
+        run: |
+          cd openwrt
+#          make defconfig
           make download -j8
           find dl -size -1024c -exec rm -f {} \;
 
@@ -93,7 +103,6 @@ jobs:
           rm -rf $(find ./bin/targets/ -type d -name "packages")
           cp -rf $(find ./bin/targets/ -type f) ./artifact/firmware/
           cp -rf $(find ./bin/packages/ -type f -name "*.ipk") ./artifact/package/
-          cp -rf $(find ./ -type f -name "*.config") ./artifact/package/
           cp -rf $(find ./bin/targets/ -type f -name "*.buildinfo" -o -name "*.manifest") ./artifact/buildinfo/
 
       - name: Deliver buildinfo
