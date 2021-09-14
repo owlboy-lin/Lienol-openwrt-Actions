@@ -149,11 +149,11 @@ jobs:
         path: ${{ env.FIRMWARE }}
 
     - name: Generate release tag
-        id: tag
-        if: env.UPLOAD_RELEASE == 'true' && !cancelled()
-        run: |
-          echo "::set-output name=release_tag::$(date +"%Y.%m.%d-%H%M")"
-          echo "::set-output name=status::success"
+      id: tag
+      if: env.UPLOAD_RELEASE == 'true' && !cancelled()
+      run: |
+        echo "::set-output name=release_tag::$(date +"%Y.%m.%d-%H%M")"
+        echo "::set-output name=status::success"
 
     - name: Upload firmware to release
       uses: softprops/action-gh-release@v1
