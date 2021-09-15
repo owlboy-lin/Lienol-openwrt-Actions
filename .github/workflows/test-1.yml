@@ -19,6 +19,24 @@ on:
         required: false
         default: 'false'
 
+
+  schedule:
+    - cron: 0 20 * * *
+  release:
+    types: [published]
+  
+  push:
+    branches: 
+      - master
+    paths:
+      - '.github/workflows/OpenWrt-CI.yml'
+
+  watch:
+    types: [started]
+    
+    
+    
+
 env:
   REPO_URL: https://github.com/Lienol/openwrt
   REPO_BRANCH: main
