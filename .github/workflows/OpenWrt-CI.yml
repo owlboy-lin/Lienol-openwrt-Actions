@@ -65,8 +65,11 @@ jobs:
           df -h
 
       - name: Clone source code
-        run: git clone -b main --single-branch https://github.com/Lienol/openwrt openwrt
-                 
+        run: |
+          df -hT $PWD
+          git clone -b main --single-branch https://github.com/Lienol/openwrt openwrt
+          ln -sf /workdir/openwrt $GITHUB_WORKSPACE/openwrt
+          
       - name: Update feeds
         run: |
           cd openwrt 
@@ -119,6 +122,7 @@ jobs:
           mkdir -p ./artifact/buildinfo
           rm -rf $(find ./bin/targets/ -type d -name "packages")
           cp -rf $(find ./bin/targets/ -type f) ./artifact/firmware/
+          cp -rf .config ./artifact/firmware/
           cp -rf $(find ./bin/packages/ -type f -name "*.ipk") ./artifact/package/
           cp -rf $(find ./bin/targets/ -type f -name "*.buildinfo" -o -name "*.manifest") ./artifact/buildinfo/
 
