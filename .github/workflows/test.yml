@@ -93,19 +93,6 @@ jobs:
             find dl -size -1024c -exec ls -l {} \;
             find dl -size -1024c -exec rm -f {} \;
             
-        - name: Compile firmware
-          run: |
-            cd openwrt
-            make -j$(nproc) || make -j1 V=s
-            echo "======================="
-            echo "Space usage:"
-            echo "======================="
-            df -h
-            echo "======================="
-            du -h --max-depth=1 ./ --exclude=build_dir --exclude=bin
-            du -h --max-depth=1 ./build_dir
-            du -h --max-depth=1 ./bin
-            
         - name: Prepare artifact
           run: |
             cd openwrt
@@ -115,51 +102,16 @@ jobs:
             rm -rf $(find ./bin/targets/ -type d -name "packages")
             cp -rf $(find ./bin/targets/ -type f) ./artifact/firmware/
             cp -rf $(find ./bin/packages/ -type f -name "*.ipk") ./artifact/package/
+            cp -rf .config ./artifact/buildinfo/config.info
             cp -rf $(find ./bin/targets/ -type f -name "*.buildinfo" -o -name "*.manifest") ./artifact/buildinfo/
-         
-        - name: Rename file
-          id: rename
-          run: |
-            cd openwrt/bin/targets
-            release_tag="${FIRMWARE_NAME}-${DATE}"
-            for i in openwrt*; do mv -f $i `echo $i | sed "s/^openwrt-$TARGET-$SUBTARGET/${release_tag}/"`; done
-            release_name="${DATE}-${FIRMWARE_NAME}-${SUBTARGET}"
-            echo "name=FIRMWARE" >> $PWD
-            echo "::set-output name=status::success"
-            echo "##[set-output name=release_tag;]$release_tag"
-            echo "##[set-output name=RELEASE_NAME;]$release_name"
-          
-        - name: Upload artifact
-          uses: actions/upload-artifact@master
+            
+            
+        - name: Deliver buildinfo
+          uses: actions/upload-artifact@v2
           with:
-            name: OpenWrt_firmware
-            path: ${{ env.FIRMWARE }}
-          
-        - name: Upload zip
-          id: upload_zip
-          run: |
-            cd openwrt
-            rm -rf ./release/
-            mkdir -p ./release/
-            zip -r -j release/${{ env.RELEASE_NAME }}.zip bin/targets/${{ env.TARGET }}/${{ env.SUBTARGET }}/* || true
-            cd release
-            echo "::set-env name=RELEASE::$PWD"
-            echo "::set-output name=status::success" 
-          
-        - name: Upload firmware to release
-          uses: softprops/action-gh-release@v1
-          env:
-            GITHUB_TOKEN: ${{ secrets.all_TOKEN }}
-          with:
-            tag_name: ${{ env.RELEASE_NAME }}
-            name: ${{ env.DATE }}
-            files: ${{ env.FIRMWARE }}/*
+          name: OpenWrt_buildinfo${{ env.DEVICE_NAME }}${{ env.FILE_DATE }}
+          path: openwrt/artifact/buildinfo/
+            
 
-        - name: Remove old Releases
-          uses: dev-drprasad/delete-older-releases@v0.1.0
-          if: env.UPLOAD_RELEASE == 'true' && !cancelled()
-          with:
-            keep_latest: 3
-            delete_tags: true
-          env:
-            GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        
+        
