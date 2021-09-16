@@ -12,9 +12,3 @@
 
 # Modify default IP
 #sed -i 's/192.168.1.1/192.168.50.5/g' package/base-files/files/bin/config_generate
-CONFIG_TARGET_x86=y
-CONFIG_TARGET_x86_64=y
-CONFIG_TARGET_x86_64_DEVICE_generic=y
-CONFIG_VMDK_IMAGES=y
-CONFIG_TARGET_IMAGES_PAD=y
-CONFIG_TARGET_IMAGES_GZIP=n
