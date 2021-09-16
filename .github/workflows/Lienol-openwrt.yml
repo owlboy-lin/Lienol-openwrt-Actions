@@ -19,6 +19,18 @@ on:
         required: false
         default: 'false'
 
+
+  schedule:
+    - cron: 0 20 * * *
+  
+  push:
+    branches: 
+      - master
+    paths:
+      - '.github/workflows/Lienol-OpenWrt.yml'
+
+
+
 env:
   REPO_URL: https://github.com/Lienol/openwrt
   REPO_BRANCH: main
@@ -33,6 +45,9 @@ env:
 
 jobs:
   build:
+  
+    name: Lienol-OpenWrt
+  
     runs-on: ubuntu-20.04
 
     steps:
