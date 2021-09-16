@@ -8,7 +8,7 @@
 # Description: Build OpenWrt using GitHub Actions
 #
 
-name: Lienol-OpenWrt
+name: Lienol-OpenWrt-passwall
 
 on:
   repository_dispatch:
@@ -18,6 +18,17 @@ on:
         description: 'SSH connection to Actions'
         required: false
         default: 'false'
+
+
+  schedule:
+    - cron: 0 20 * * *
+  
+  push:
+    branches: 
+      - master
+    paths:
+      - '.github/workflows/Lienol-OpenWrt-passwall.yml'
+
 
 env:
   REPO_URL: https://github.com/Lienol/openwrt
@@ -33,6 +44,9 @@ env:
 
 jobs:
   build:
+    
+    name: Lienol-OpenWrt-passwall
+  
     runs-on: ubuntu-20.04
 
     steps:
