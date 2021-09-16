@@ -74,8 +74,7 @@ jobs:
             df -h
 
         - name: Clone source code
-          run: 
-            df -hT $PWD                 
+          run:                         
             git clone -b main --single-branch https://github.com/Lienol/openwrt openwrt
             ln -sf /workdir/openwrt $GITHUB_WORKSPACE/openwrt
             
