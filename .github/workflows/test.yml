@@ -28,17 +28,15 @@ on:
 env:
   REPO_URL: https://github.com/Lienol/openwrt
   REPO_BRANCH: main
-  FIRMWARE_NAME: Lean-x64-simple
-  CONFIG_FILE: Lean-x64-simple
-  DIY_SH: diy.sh
-  TARGET: x86
-  SUBTARGET: 64
-  SSH_ACTIONS: false
-  Gzip_file: true
+  FEEDS_CONF: feeds.conf.default
+  CONFIG_FILE: x64
+  DIY_P1_SH: diy-part1.sh
+  DIY_P2_SH: diy-part2.sh
   UPLOAD_BIN_DIR: false
-  UPLOAD_ZIP: true
   UPLOAD_FIRMWARE: true
-  UPLOAD_RELEASE: true
+  UPLOAD_COWTRANSFER: false
+  UPLOAD_WETRANSFER: false
+  UPLOAD_RELEASE: false
   TZ: Asia/Shanghai
 
 jobs:
