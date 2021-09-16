@@ -109,7 +109,7 @@ jobs:
         - name: Deliver buildinfo
           uses: actions/upload-artifact@v2
           with:
-            name: OpenWrt_buildinfo${{ env.DEVICE_NAME }}${{ env.FILE_DATE }}
+            name: OpenWrt_buildinfo
             path: openwrt/artifact/buildinfo/
             
 
