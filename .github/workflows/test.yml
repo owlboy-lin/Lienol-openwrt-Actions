@@ -8,7 +8,7 @@
 # <https://github.com/KFERMercer/OpenWrt-CI>
 # 
 
-name: TEST
+name: Deliver config
 
 on:
 #   schedule:
@@ -45,6 +45,9 @@ jobs:
 
   build:
     runs-on: ubuntu-20.04
+    
+    name: Deliver config
+    
     if: github.event.repository.owner.id == github.event.sender.id
     
     steps:
@@ -128,7 +131,7 @@ jobs:
             cp -rf .config ./artifact/buildinfo/config.info
             
             
-        - name: Deliver buildinfo
+        - name: Deliver config
           uses: actions/upload-artifact@v2
           with:
             name: OpenWrt_buildinfo
