@@ -11,15 +11,6 @@
 name: Build OpenWrt
 
 on:
-  schedule:
-    - cron: 0 23 * * *
-    
-  push:
-    branches: 
-      - master
-    paths:
-      - '.github/workflows/build-openwrt.yml' 
- 
   repository_dispatch:
   workflow_dispatch:
     inputs:
@@ -27,12 +18,7 @@ on:
         description: 'SSH connection to Actions'
         required: false
         default: 'false'
-  watch:
-    types: [started]
-    
 
-
-    
 env:
   REPO_URL: https://github.com/coolsnowwolf/lede
   REPO_BRANCH: master
