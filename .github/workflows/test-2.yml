@@ -19,6 +19,19 @@ on:
         required: false
         default: 'false'
 
+
+  push:
+    branches: 
+      - master
+    paths:
+      - '.github/workflows/test.yml'
+
+
+  watch:
+    types: [started]
+
+
+
 env:
   REPO_URL: https://github.com/Lienol/openwrt
   REPO_BRANCH: main
