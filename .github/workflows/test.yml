@@ -74,18 +74,45 @@ jobs:
             df -h
 
         - name: Clone source code
-          run: git clone -b main --single-branch https://github.com/Lienol/openwrt openwrt
-        
-        - name: Update feeds
+          run: 
+            df -hT $PWD                 
+            git clone -b main --single-branch https://github.com/Lienol/openwrt openwrt
+            ln -sf /workdir/openwrt $GITHUB_WORKSPACE/openwrt
+            
+            
+        - name: Load custom feeds
+          run: |
+            [ -e $FEEDS_CONF ] && mv $FEEDS_CONF openwrt/feeds.conf.default
+            chmod +x $DIY_P1_SH
+            cd openwrt
+            $GITHUB_WORKSPACE/$DIY_P1_SH
+
+        - name: Update feeds   
           run: cd openwrt && ./scripts/feeds update -a
 
         - name: Install feeds
           run: cd openwrt && ./scripts/feeds install -a
 
+        - name: Load custom configuration
+          run: |
+            [ -e files ] && mv files openwrt/files
+            [ -e $CONFIG_FILE ] && mv $CONFIG_FILE openwrt/.config
+            chmod +x $DIY_P2_SH
+            cd openwrt
+            $GITHUB_WORKSPACE/$DIY_P2_SH
+
+        - name: SSH connection to Actions
+          uses: P3TERX/ssh2actions@v1.0.0
+          if: (github.event.inputs.ssh == 'true' && github.event.inputs.ssh  != 'false') || contains(github.event.action, 'ssh')
+          env:
+            TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+            TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+
         - name: Generate configuration file
           run:  |
             cd openwrt
             make defconfig
+ 
         - name: Make download
           run: |
             cd openwrt
@@ -96,14 +123,8 @@ jobs:
         - name: Prepare artifact
           run: |
             cd openwrt
-            mkdir -p ./artifact/firmware
-            mkdir -p ./artifact/package
             mkdir -p ./artifact/buildinfo
-            rm -rf $(find ./bin/targets/ -type d -name "packages")
-            cp -rf $(find ./bin/targets/ -type f) ./artifact/firmware/
-            cp -rf $(find ./bin/packages/ -type f -name "*.ipk") ./artifact/package/
             cp -rf .config ./artifact/buildinfo/config.info
-            cp -rf $(find ./bin/targets/ -type f -name "*.buildinfo" -o -name "*.manifest") ./artifact/buildinfo/
             
             
         - name: Deliver buildinfo
