@@ -8,7 +8,7 @@
 # <https://github.com/KFERMercer/OpenWrt-CI>
 # 
 
-name: Deliver config $REPO_BRANCH
+name: Deliver config 19.07
 
 on:
 #   schedule:
@@ -50,7 +50,7 @@ jobs:
   build:
     runs-on: ubuntu-latest
     
-    name: Deliver config $REPO_BRANCH
+    name: Deliver config 19.07
     
     if: github.event.repository.owner.id == github.event.sender.id
     
