@@ -21,18 +21,7 @@ on:
         required: false
         default: 'false'
 
-        
-#  push:
-#    branches: 
-#      - master
-#    paths:
-#      - '.github/workflows/test.yml'
-
-
-#  watch:
-#    types: [started]
-
-      
+       
 env:
   REPO_URL: https://github.com/Lienol/openwrt
   REPO_BRANCH: 19.07
@@ -99,6 +88,7 @@ jobs:
 
         - name: Install feeds
           run: cd openwrt && ./scripts/feeds install -a
+
 
         - name: Load custom configuration
           run: |
