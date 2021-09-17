@@ -78,16 +78,10 @@ jobs:
           working-directory: /workdir
           run:   
             df -hT $PWD
-<<<<<<< Updated upstream
-            git clone $REPO_URL -b $REPO_BRANCH openwrt
-            ln -sf /workdir/openwrt $GITHUB_WORKSPACE/openwrt
-        
-=======
             git clone -b $REPO_BRANCH --single-branch $REPO_URL openwrt19
             ln -sf /workdir/openwrt19 $GITHUB_WORKSPACE/openwrt19
         
 
->>>>>>> Stashed changes
         - name: Load custom feeds
           run: |
             [ -e $FEEDS_CONF ] && mv $FEEDS_CONF openwrt19/feeds.conf.default
