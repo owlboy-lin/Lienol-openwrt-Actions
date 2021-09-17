@@ -13,16 +13,24 @@ name: Deliver config
 on:
 #   schedule:
 #     - cron: 0 20 * * *
-      
-  push:
-    branches: 
-      - master
-    paths:
-      - '.github/workflows/test.yml'
+  repository_dispatch:
+  workflow_dispatch:
+    inputs:
+      ssh:
+        description: 'SSH connection to Actions'
+        required: false
+        default: 'false'
+
+        
+#  push:
+#    branches: 
+#      - master
+#    paths:
+#      - '.github/workflows/test.yml'
 
 
-  watch:
-    types: [started]
+#  watch:
+#    types: [started]
 
       
 env:
