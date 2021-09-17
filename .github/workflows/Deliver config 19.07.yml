@@ -78,39 +78,46 @@ jobs:
           working-directory: /workdir
           run:   
             df -hT $PWD
+<<<<<<< Updated upstream
             git clone $REPO_URL -b $REPO_BRANCH openwrt
             ln -sf /workdir/openwrt $GITHUB_WORKSPACE/openwrt
         
+=======
+            git clone -b $REPO_BRANCH --single-branch $REPO_URL openwrt19
+            ln -sf /workdir/openwrt19 $GITHUB_WORKSPACE/openwrt19
+        
+
+>>>>>>> Stashed changes
         - name: Load custom feeds
           run: |
-            [ -e $FEEDS_CONF ] && mv $FEEDS_CONF openwrt/feeds.conf.default
+            [ -e $FEEDS_CONF ] && mv $FEEDS_CONF openwrt19/feeds.conf.default
             chmod +x $DIY_P1_SH
-            cd openwrt
+            cd openwrt19
             $GITHUB_WORKSPACE/$DIY_P1_SH
 
         - name: Update feeds   
-          run: cd openwrt && ./scripts/feeds update -a
+          run: cd openwrt19 && ./scripts/feeds update -a
 
         - name: Install feeds
-          run: cd openwrt && ./scripts/feeds install -a
+          run: cd openwrt19 && ./scripts/feeds install -a
 
         - name: Load custom configuration
           run: |
-            [ -e files ] && mv files openwrt/files
-            [ -e $CONFIG_FILE ] && mv $CONFIG_FILE openwrt/.config
+            [ -e files ] && mv files openwrt19/files
+            [ -e $CONFIG_FILE ] && mv $CONFIG_FILE openwrt19/.config
             chmod +x $DIY_P2_SH
-            cd openwrt
+            cd openwrt19
             $GITHUB_WORKSPACE/$DIY_P2_SH
 
 
         - name: Generate configuration file
           run:  |
-            cd openwrt
+            cd openwrt19
             make defconfig
  
         - name: Make download
           run: |
-            cd openwrt
+            cd openwrt19
             make download -j8
             find dl -size -1024c -exec ls -l {} \;
             find dl -size -1024c -exec rm -f {} \;
@@ -126,7 +133,7 @@ jobs:
   
         - name: Prepare artifact
           run: |
-            cd openwrt
+            cd openwrt19
             mkdir -p ./artifact/buildinfo
             cp -rf .config ./artifact/buildinfo/config.info
             
@@ -135,7 +142,7 @@ jobs:
           uses: actions/upload-artifact@v2
           with:
             name: OpenWrt_configinfo
-            path: openwrt/artifact/buildinfo/
+            path: openwrt19/artifact/buildinfo/
             
 
         
