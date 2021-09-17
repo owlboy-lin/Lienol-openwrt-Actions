@@ -46,7 +46,7 @@ env:
 jobs:
 
   build:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-18.04
     
     name: Deliver config 19.07
     
@@ -73,13 +73,14 @@ jobs:
             sudo timedatectl set-timezone "$TZ"
             sudo mkdir -p /workdir
             sudo chown $USER:$GROUPS /workdir
-            df -hT $PWD
+
             
         - name: Clone source code
           working-directory: /workdir
           run:   
+            df -hT $PWD
             git clone -b 19.07 --single-branch https://github.com/Lienol/openwrt openwrt19
-       
+            ln -sf /workdir/openwrt19 $GITHUB_WORKSPACE/openwrt19
 
         - name: Load custom feeds
           run: |
