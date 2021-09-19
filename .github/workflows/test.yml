@@ -18,21 +18,9 @@ on:
     inputs:
       ssh:
         description: 'SSH connection to Actions'
-        required: false
-        default: 'false'
+        required: true
+        default: 'true'
 
-        
-#  push:
-#    branches: 
-#      - master
-#    paths:
-#      - '.github/workflows/test.yml'
-
-
-#  watch:
-#    types: [started]
-
-      
 env:
   REPO_URL: git clone https://github.com/coolsnowwolf/lede
   REPO_BRANCH: master
