@@ -26,8 +26,6 @@ on:
   push:
     branches: 
       - master
-    paths:
-      - '.github/workflows/Lienol-OpenWrt-passwall.yml'
 
 
 env:
