@@ -13,16 +13,14 @@ name: TEST
 on:
 #   schedule:
 #     - cron: 0 20 * * *
-      
-  push:
-    branches: 
-      - master
-    paths:
-      - '.github/workflows/test.yml'
-      - 'LeanR9-x64-simple'
+  repository_dispatch:
+  workflow_dispatch:
+    inputs:
+      ssh:
+        description: 'SSH connection to Actions'
+        required: true
+        default: 'true'
 
-  watch:
-    types: [started]
 
       
 env:
