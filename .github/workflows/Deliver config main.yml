@@ -8,7 +8,7 @@
 # <https://github.com/KFERMercer/OpenWrt-CI>
 # 
 
-name: Deliver config
+name: Deliver config main
 
 on:
 #   schedule:
